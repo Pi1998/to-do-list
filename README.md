@@ -137,7 +137,6 @@ sh
 👤 **Shinn Thant Swam Ye**
 
 - GitHub: [@Pi1998](https://github.com/Pi1998)
-- Twitter: [@Pi1998](https://twitter.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
