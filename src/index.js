@@ -1,4 +1,5 @@
 // import _ from 'lodash';
+/* eslint-disable no-unused-vars */
 import './style.css';
 
 // Get references to the HTML elements
@@ -8,68 +9,16 @@ const addNewListInput = document.getElementById('tdl-add-input');
 const clearTaskBtn = document.getElementById('clear-btn');
 
 // Define the key for local storage
-const Local_Storage_Task_Key = 'task.tasks';
+const LOCAL_STORAGE_TASK_KEY = 'task.tasks';
 
 // Retrieve tasks from local storage or create an empty array if no tasks are stored
-let tasks = JSON.parse(localStorage.getItem(Local_Storage_Task_Key)) || [];
-
-// Add event listener to the form for adding a new task
-addNewListForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const description = addNewListInput.value;
-  if (description == null || description === '') return;
-
-  // Create a new task object and add it to the tasks array
-  const task = addTask(description);
-  addNewListInput.value = null;
-  tasks.push(task);
-
-  // Save and render the updated tasks list
-  saveAndRender();
-});
-
-// Add event listener to the "Clear all completed" button
-clearTaskBtn.addEventListener('click', e => {
-  tasks = tasks.filter(task => !task.completed); // Remove completed tasks from the tasks array
-  updateIndexes(); // Update the indexes of remaining tasks
-  saveAndRender();
-});
-
-
-// Function to create a new task object
-function addTask(description) {
-  return {
-    description: description,
-    completed: false,
-
-    // Set the index based on the current length of the tasks array
-    index: tasks.length + 1,
-  };
-}
-
-// Update the indexes of remaining tasks after a task is deleted
-function updateIndexes() {
-  tasks.forEach((task, index) => {
-    task.index = index + 1;
-  });
-}
-
-function saveAndRender() {
-  save();
-  renderTasks();
-}
-
-// Function to save the tasks to local storage
-function save() {
-  localStorage.setItem(Local_Storage_Task_Key, JSON.stringify(tasks));
-}
-
+let tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TASK_KEY)) || [];
 
 // Function to render the tasks list
 function renderTasks() {
   toDoList.innerHTML = '';
 
-  tasks.forEach(task => {
+  tasks.forEach((task) => {
     const listItem = document.createElement('div');
     listItem.classList.add('tdl-item');
 
@@ -107,6 +56,55 @@ function renderTasks() {
   });
 }
 
+// Function to save the tasks to local storage
+function save() {
+  localStorage.setItem(LOCAL_STORAGE_TASK_KEY, JSON.stringify(tasks));
+}
+
+function saveAndRender() {
+  save();
+  renderTasks();
+}
+
+// Update the indexes of remaining tasks after a task is deleted
+function updateIndexes() {
+  tasks.forEach((task, index) => {
+    task.index = index + 1;
+  });
+}
+
+// Add event listener to the "Clear all completed" button
+clearTaskBtn.addEventListener('click', (e) => {
+  tasks = tasks.filter((task) => !task.completed); // Remove completed tasks from the tasks array
+  updateIndexes(); // Update the indexes of remaining tasks
+  saveAndRender();
+});
+
+// Function to create a new task object
+function addTask(description) {
+  return {
+    description,
+    completed: false,
+
+    // Set the index based on the current length of the tasks array
+    index: tasks.length + 1,
+  };
+}
+
+// Add event listener to the form for adding a new task
+addNewListForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const description = addNewListInput.value;
+  if (description == null || description === '') return;
+
+  // Create a new task object and add it to the tasks array
+  const task = addTask(description);
+  addNewListInput.value = null;
+  tasks.push(task);
+
+  // Save and render the updated tasks list
+  saveAndRender();
+});
 
 // Event listener to render the tasks list when the page is loaded
 document.addEventListener('DOMContentLoaded', saveAndRender);
