@@ -14,8 +14,8 @@ main {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  justify-content: center;
-  margin: 0 20% 0 20%;
+  justify-content: flex-start;
+  margin: 20% 20% 0 20%;
   min-width: 200px;
 }
 
