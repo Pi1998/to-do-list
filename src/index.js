@@ -178,11 +178,11 @@ addNewListForm.addEventListener('submit', (e) => {
 });
 
 // Add event listener to the "Clear all completed" button
-// clearTaskBtn.addEventListener('click', () => {
-//   tasks = tasks.filter((task) => !task.completed); // Remove completed tasks from the tasks array
-//   updateIndexes(); // Update the indexes of remaining tasks
-//   saveAndRender();
-// });
+clearTaskBtn.addEventListener('click', () => {
+  tasks = tasks.filter((task) => !task.completed); // Remove completed tasks from the tasks array
+  updateIndexes(); // Update the indexes of remaining tasks
+  saveAndRender();
+});
 
 // Event delegation for trash can icon
 toDoList.addEventListener('click', (e) => {
