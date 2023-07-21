@@ -14,8 +14,8 @@ main {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  justify-content: center;
-  margin: 0 20% 0 20%;
+  justify-content: flex-start;
+  margin: 20% 20% 0 20%;
   min-width: 200px;
 }
 
@@ -102,12 +102,37 @@ hr {
   margin-right: 5%;
 }
 
+.tdl-list-txt {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 1);
+  border: none;
+  width: 87%;
+}
+
 .option-icon {
   float: right;
 }
 
 .option-icon button:hover {
   cursor: move;
+}
+
+.trash-can-icon {
+  font-size: 1.3rem;
+  background-color: bisque;
+}
+
+.fa-trash-can {
+  cursor: pointer;
+}
+
+/* transition */
+.tdl-item-transition {
+  transition: background-color 0.5s ease;
+}
+
+.tdl-description-transition {
+  transition: background-color 0.5s ease;
 }
 
 /* Clear Btn */

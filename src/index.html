@@ -16,14 +16,14 @@
                 <button class="btn-refresh"><i class="fa-solid fa-arrows-rotate"></i></button>
             </div>
             <hr>
-            <div class="tdl-add">
-                <input type="text" placeholder="Add to your list...">
-                <button><i class="fa fa-level-down" aria-hidden="true"></i></button>
-            </div>
+            <form action="" class="tdl-add" id="tdl-add">
+                <input type="text" id="tdl-add-input" placeholder="Add to your list..." aria-label="Add to your list...">
+                <button id="tdl-add-btn"><i class="fa fa-level-down" aria-hidden="true"></i></button>
+            </form>
             <hr>
             <ul class="tdl-lists" id="tdl-lists"></ul>
             <div class="tdl-clear">
-                <button class="clear-txt">Clear all completed</button>
+                <button class="clear-btn" id="clear-btn">Clear all completed</button>
             </div>
         </div>
     </main>
