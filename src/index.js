@@ -39,12 +39,12 @@ function renderTasks() {
     checkbox.classList.add('check-box');
     checkbox.type = 'checkbox';
     checkbox.index = task.index;
-    // checkbox.checked = task.completed;
+    checkbox.checked = task.completed;
 
-    // checkbox.addEventListener('change', () => {
-    //   task.completed = checkbox.checked;
-    //   save();
-    // });
+    checkbox.addEventListener('change', () => {
+      task.completed = checkbox.checked;
+      save();
+    });
 
     const description = document.createElement('input');
     description.classList.add('tdl-list-txt');
