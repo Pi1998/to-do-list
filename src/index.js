@@ -1,7 +1,8 @@
-// import _ from 'lodash';
+//import _ from 'lodash';
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
 import './style.css';
+import setupClearButton from './module';
 
 // Get references to the HTML elements
 const toDoList = document.getElementById('tdl-lists');
@@ -178,11 +179,16 @@ addNewListForm.addEventListener('submit', (e) => {
 });
 
 // Add event listener to the "Clear all completed" button
+// clearTaskBtn.addEventListener('click', () => {
+//   tasks = tasks.filter((task) => !task.completed); // Remove completed tasks from the tasks array
+//   updateIndexes(); // Update the indexes of remaining tasks
+//   saveAndRender();
+// });
+
 clearTaskBtn.addEventListener('click', () => {
-  tasks = tasks.filter((task) => !task.completed); // Remove completed tasks from the tasks array
-  updateIndexes(); // Update the indexes of remaining tasks
-  saveAndRender();
+  tasks = setupClearButton(tasks, updateIndexes, saveAndRender); // Call the setupClearButton function and pass tasks
 });
+
 
 // Event delegation for trash can icon
 toDoList.addEventListener('click', (e) => {
