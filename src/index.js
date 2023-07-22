@@ -1,8 +1,8 @@
-//import _ from 'lodash';
+// import _ from 'lodash';
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
 import './style.css';
-import setupClearButton from './module';
+import setupClearButton from './module.js';
 
 // Get references to the HTML elements
 const toDoList = document.getElementById('tdl-lists');
@@ -186,9 +186,9 @@ addNewListForm.addEventListener('submit', (e) => {
 // });
 
 clearTaskBtn.addEventListener('click', () => {
-  tasks = setupClearButton(tasks, updateIndexes, saveAndRender); // Call the setupClearButton function and pass tasks
+  // Call the setupClearButton function and pass tasks
+  tasks = setupClearButton(tasks, updateIndexes, saveAndRender);
 });
-
 
 // Event delegation for trash can icon
 toDoList.addEventListener('click', (e) => {
