@@ -6,3 +6,10 @@ export default function setupClearButton(tasks, updateIndexes, saveAndRender) {
 
   return tasks; // Return the updated tasks array
 }
+
+export function attachCheckboxChangeEvent(checkbox, task, save) {
+  checkbox.addEventListener('change', () => {
+    task.completed = checkbox.checked;
+    save();
+  });
+}
