@@ -1,6 +1,6 @@
 // import _ from 'lodash';
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-use-before-define */
+
 import './style.css';
 import setupClearButton, { attachCheckboxChangeEvent } from './module.js';
 
