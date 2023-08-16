@@ -42,10 +42,6 @@ function renderTasks() {
     checkbox.index = task.index;
     checkbox.checked = task.completed;
 
-    // checkbox.addEventListener('change', () => {
-    //   task.completed = checkbox.checked;
-    //   save();
-    // });
     attachCheckboxChangeEvent(checkbox, task, save);
 
     const description = document.createElement('input');
@@ -178,13 +174,6 @@ addNewListForm.addEventListener('submit', (e) => {
   tasks.push(task);
   saveAndRender();
 });
-
-// Add event listener to the "Clear all completed" button
-// clearTaskBtn.addEventListener('click', () => {
-//   tasks = tasks.filter((task) => !task.completed); // Remove completed tasks from the tasks array
-//   updateIndexes(); // Update the indexes of remaining tasks
-//   saveAndRender();
-// });
 
 clearTaskBtn.addEventListener('click', () => {
   // Call the setupClearButton function and pass tasks
