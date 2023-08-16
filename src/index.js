@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
 import './style.css';
-import setupClearButton from './module.js';
+import setupClearButton, { attachCheckboxChangeEvent } from './module.js';
 
 // Get references to the HTML elements
 const toDoList = document.getElementById('tdl-lists');
@@ -42,10 +42,11 @@ function renderTasks() {
     checkbox.index = task.index;
     checkbox.checked = task.completed;
 
-    checkbox.addEventListener('change', () => {
-      task.completed = checkbox.checked;
-      save();
-    });
+    // checkbox.addEventListener('change', () => {
+    //   task.completed = checkbox.checked;
+    //   save();
+    // });
+    attachCheckboxChangeEvent(checkbox, task, save);
 
     const description = document.createElement('input');
     description.classList.add('tdl-list-txt');
