@@ -28,6 +28,82 @@ function save() {
   localStorage.setItem(LOCAL_STORAGE_TASK_KEY, JSON.stringify(tasks));
 }
 
+function editTaskDescription(index, newDescription) {
+  const task = tasks.find((task) => task.index === index);
+  if (task) {
+    task.description = newDescription;
+    save();
+
+    // Update the edited task's description in the DOM
+    const listItem = toDoList.children[index - 1];
+    const description = listItem.querySelector('.tdl-list-txt');
+    description.value = newDescription;
+
+    // Check if the task is completed and apply the style with strike-through if true
+    if (task.completed) {
+      description.style.textDecoration = 'line-through';
+    } else {
+      description.style.textDecoration = 'none';
+    }
+  }
+}
+
+function editTask(index) {
+  const listItem = toDoList.children[index - 1];
+  const description = listItem.querySelector('.tdl-list-txt');
+  const optionIcon = listItem.querySelector('.option-icon');
+
+  // Save the current description value before editing
+  const currentDescription = description.value;
+
+  // Change the background color to "bisque"
+  listItem.style.backgroundColor = 'bisque';
+  listItem.classList.add('tdl-item-transition');
+  description.style.backgroundColor = 'bisque';
+  description.classList.add('tdl-description-transition');
+
+  // Replace the option icon with the trash can icon
+  optionIcon.innerHTML = '<button class="trash-can-icon"><i class="fa fa-trash-can" aria-hidden="true"></i></button>';
+
+  // Focus on the input box for easy editing
+  description.focus();
+
+  // Add event listener to the input box to handle editing
+  description.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+      const newDescription = description.value.trim();
+      if (newDescription !== '') {
+        listItem.style.backgroundColor = ''; // Reset background color
+        description.style.backgroundColor = '';
+        optionIcon.innerHTML = '<button><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>'; // Reset option icon
+        editTaskDescription(index, newDescription);
+      } else {
+        description.value = currentDescription; // Revert to the original description if empty
+      }
+    }
+  });
+
+  // Add event listener to the input box for when focus is lost
+  description.addEventListener('click', () => {
+    const newDescription = description.value.trim();
+    if (newDescription !== '') {
+      listItem.style.backgroundColor = ''; // Reset background color
+      description.style.backgroundColor = '';
+      optionIcon.innerHTML = '<button><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>'; // Reset option icon
+      editTaskDescription(index, newDescription);
+
+      // Remove the transition class after the editing is done
+      listItem.classList.remove('tdl-item-transition');
+      description.classList.remove('tdl-description-transition');
+    } else {
+      description.value = currentDescription; // Revert to the original description if empty
+      // Remove the transition class after the editing is done
+      listItem.classList.remove('tdl-item-transition');
+      description.classList.remove('tdl-description-transition');
+    }
+  });
+}
+
 // Function to render the tasks list
 function renderTasks() {
   toDoList.innerHTML = '';
@@ -72,85 +148,17 @@ function renderTasks() {
   });
 }
 
-function saveAndRender() {
-  save();
-  renderTasks();
-}
-
 // function to remove individual task
 function removeTask(index) {
   tasks = tasks.filter((task) => task.index !== index); // Remove the task with the specified index
   updateIndexes(); // Update the indexes of remaining tasks
-  saveAndRender();
+  save();
+  renderTasks();
 }
 
-function editTaskDescription(index, newDescription) {
-  const task = tasks.find((task) => task.index === index);
-  if (task) {
-    task.description = newDescription;
-    saveAndRender();
-  }
-}
-
-function editTask(index) {
-  const listItem = toDoList.children[index - 1];
-  const description = listItem.querySelector('.tdl-list-txt');
-  const optionIcon = listItem.querySelector('.option-icon');
-
-  // Save the current description value before editing
-  const currentDescription = description.value;
-
-  // Change the background color to "bisque"
-  listItem.style.backgroundColor = 'bisque';
-  listItem.classList.add('tdl-item-transition');
-  description.style.backgroundColor = 'bisque';
-  description.classList.add('tdl-description-transition');
-
-  // Replace the option icon with the trash can icon
-  optionIcon.innerHTML = '<button class="trash-can-icon"><i class="fa fa-trash-can" aria-hidden="true"></i></button>';
-
-  // Focus on the input box for easy editing
-  description.focus();
-
-  // Add event listener to the input box to handle editing
-  description.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') {
-      const newDescription = description.value.trim();
-      if (newDescription !== '') {
-        listItem.style.backgroundColor = ''; // Reset background color
-        optionIcon.innerHTML = '<button><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>'; // Reset option icon
-        editTaskDescription(index, newDescription);
-      } else {
-        description.value = currentDescription; // Revert to the original description if empty
-      }
-    }
-  });
-
-  // Add event listener to the input box for when focus is lost
-  description.addEventListener('click', () => {
-    const newDescription = description.value.trim();
-    if (newDescription !== '') {
-      listItem.style.backgroundColor = ''; // Reset background color
-      optionIcon.innerHTML = '<button><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>'; // Reset option icon
-      editTaskDescription(index, newDescription);
-
-      // Remove the transition class after the editing is done
-      listItem.classList.remove('tdl-item-transition');
-      description.classList.remove('tdl-description-transition');
-    } else {
-      description.value = currentDescription; // Revert to the original description if empty
-      // Remove the transition class after the editing is done
-      listItem.classList.remove('tdl-item-transition');
-      description.classList.remove('tdl-description-transition');
-    }
-  });
-
-  // Add event listener to the trash can icon button for removing the task
-  const trashCanIcon = optionIcon.querySelector('i.fa-trash-can');
-  trashCanIcon.addEventListener('click', (e) => {
-    e.stopPropagation(); // Stop the click event from propagating to the parent elements
-    removeTask(index); // Call the removeTask function when the trash can icon is clicked
-  });
+function saveAndRender() {
+  save();
+  renderTasks();
 }
 
 // Function to create a new task object
