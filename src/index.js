@@ -1,7 +1,8 @@
 // import _ from 'lodash';
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-use-before-define */
+
 import './style.css';
+import setupClearButton, { attachCheckboxChangeEvent } from './module.js';
 
 // Get references to the HTML elements
 const toDoList = document.getElementById('tdl-lists');
@@ -27,30 +28,16 @@ function save() {
   localStorage.setItem(LOCAL_STORAGE_TASK_KEY, JSON.stringify(tasks));
 }
 
-// Function to render the tasks list
-function renderTasks() {
-  toDoList.innerHTML = '';
+function editTaskDescription(index, newDescription) {
+  const task = tasks.find((task) => task.index === index);
+  if (task) {
+    task.description = newDescription;
+    save();
 
-  tasks.forEach((task) => {
-    const listItem = document.createElement('div');
-    listItem.classList.add('tdl-item');
-
-    const checkbox = document.createElement('input');
-    checkbox.classList.add('check-box');
-    checkbox.type = 'checkbox';
-    checkbox.index = task.index;
-    // checkbox.checked = task.completed;
-
-    // checkbox.addEventListener('change', () => {
-    //   task.completed = checkbox.checked;
-    //   save();
-    // });
-
-    const description = document.createElement('input');
-    description.classList.add('tdl-list-txt');
-    description.type = 'text';
-    description.value = task.description;
-    description.style.outline = 'none';
+    // Update the edited task's description in the DOM
+    const listItem = toDoList.children[index - 1];
+    const description = listItem.querySelector('.tdl-list-txt');
+    description.value = newDescription;
 
     // Check if the task is completed and apply the style with strike-through if true
     if (task.completed) {
@@ -58,39 +45,6 @@ function renderTasks() {
     } else {
       description.style.textDecoration = 'none';
     }
-
-    const optionIcon = document.createElement('span');
-    optionIcon.innerHTML = '<button><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>';
-    optionIcon.classList.add('option-icon');
-
-    description.addEventListener('click', () => {
-      editTask(task.index);
-    });
-
-    listItem.appendChild(checkbox);
-    listItem.appendChild(description);
-    listItem.appendChild(optionIcon);
-    toDoList.appendChild(listItem);
-  });
-}
-
-function saveAndRender() {
-  save();
-  renderTasks();
-}
-
-// function to remove individual task
-function removeTask(index) {
-  tasks = tasks.filter((task) => task.index !== index); // Remove the task with the specified index
-  updateIndexes(); // Update the indexes of remaining tasks
-  saveAndRender();
-}
-
-function editTaskDescription(index, newDescription) {
-  const task = tasks.find((task) => task.index === index);
-  if (task) {
-    task.description = newDescription;
-    saveAndRender();
   }
 }
 
@@ -120,6 +74,7 @@ function editTask(index) {
       const newDescription = description.value.trim();
       if (newDescription !== '') {
         listItem.style.backgroundColor = ''; // Reset background color
+        description.style.backgroundColor = '';
         optionIcon.innerHTML = '<button><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>'; // Reset option icon
         editTaskDescription(index, newDescription);
       } else {
@@ -133,6 +88,7 @@ function editTask(index) {
     const newDescription = description.value.trim();
     if (newDescription !== '') {
       listItem.style.backgroundColor = ''; // Reset background color
+      description.style.backgroundColor = '';
       optionIcon.innerHTML = '<button><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>'; // Reset option icon
       editTaskDescription(index, newDescription);
 
@@ -146,13 +102,63 @@ function editTask(index) {
       description.classList.remove('tdl-description-transition');
     }
   });
+}
 
-  // Add event listener to the trash can icon button for removing the task
-  const trashCanIcon = optionIcon.querySelector('i.fa-trash-can');
-  trashCanIcon.addEventListener('click', (e) => {
-    e.stopPropagation(); // Stop the click event from propagating to the parent elements
-    removeTask(index); // Call the removeTask function when the trash can icon is clicked
+// Function to render the tasks list
+function renderTasks() {
+  toDoList.innerHTML = '';
+
+  tasks.forEach((task) => {
+    const listItem = document.createElement('div');
+    listItem.classList.add('tdl-item');
+
+    const checkbox = document.createElement('input');
+    checkbox.classList.add('check-box');
+    checkbox.type = 'checkbox';
+    checkbox.index = task.index;
+    checkbox.checked = task.completed;
+
+    attachCheckboxChangeEvent(checkbox, task, save);
+
+    const description = document.createElement('input');
+    description.classList.add('tdl-list-txt');
+    description.type = 'text';
+    description.value = task.description;
+    description.style.outline = 'none';
+
+    // Check if the task is completed and apply the style with strike-through if true
+    if (task.completed) {
+      description.style.textDecoration = 'line-through';
+    } else {
+      description.style.textDecoration = 'none';
+    }
+
+    const optionIcon = document.createElement('span');
+    optionIcon.innerHTML = '<button><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>';
+    optionIcon.classList.add('option-icon');
+
+    description.addEventListener('click', () => {
+      editTask(task.index);
+    });
+
+    listItem.appendChild(checkbox);
+    listItem.appendChild(description);
+    listItem.appendChild(optionIcon);
+    toDoList.appendChild(listItem);
   });
+}
+
+// function to remove individual task
+function removeTask(index) {
+  tasks = tasks.filter((task) => task.index !== index); // Remove the task with the specified index
+  updateIndexes(); // Update the indexes of remaining tasks
+  save();
+  renderTasks();
+}
+
+function saveAndRender() {
+  save();
+  renderTasks();
 }
 
 // Function to create a new task object
@@ -177,12 +183,10 @@ addNewListForm.addEventListener('submit', (e) => {
   saveAndRender();
 });
 
-// Add event listener to the "Clear all completed" button
-// clearTaskBtn.addEventListener('click', () => {
-//   tasks = tasks.filter((task) => !task.completed); // Remove completed tasks from the tasks array
-//   updateIndexes(); // Update the indexes of remaining tasks
-//   saveAndRender();
-// });
+clearTaskBtn.addEventListener('click', () => {
+  // Call the setupClearButton function and pass tasks
+  tasks = setupClearButton(tasks, updateIndexes, saveAndRender);
+});
 
 // Event delegation for trash can icon
 toDoList.addEventListener('click', (e) => {
