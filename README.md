@@ -66,7 +66,7 @@
 
 ## 🚀 Live Demo <a name="live-demo"></a>
 
-> You can access a live demo <a href="https://ometman.github.io/to-do-list/dist"> here</a>
+> You can access a live demo <a href="https://pi1998.github.io/to-do-list/dist/."> here</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
